@@ -2029,8 +2029,8 @@ export const MyShowAppsIconMenu = class extends PopupMenu.PopupMenu {
   }
 
   _appendMenuItem(labelText) {
-    // FIXME: app-well-menu-item style
     let item = new PopupMenu.PopupMenuItem(labelText)
+    item.add_style_class_name('app-well-menu-item')
     this.addMenuItem(item)
     return item
   }

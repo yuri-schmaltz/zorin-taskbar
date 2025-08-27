@@ -18,11 +18,8 @@ endif
 INSTALLNAME = zorin-taskbar@zorinos.com
 
 # The command line passed variable VERSION is used to set the version string
-# in the metadata and in the generated zip-file.
-ifdef VERSION
-else
-	VERSION = 65
-endif
+# in the metadata and in the generated zip-file. Default to metadata.json value.
+VERSION ?= $(shell jq -r '.version' metadata.json)
 
 ifdef TARGET
 	FILESUFFIX = _v$(VERSION)_$(TARGET)
@@ -35,7 +32,10 @@ all: extension
 clean:
 	rm -f ./schemas/gschemas.compiled
 
-extension: ./schemas/gschemas.compiled $(MSGSRC:.po=.mo)
+extension: check-po-headers ./schemas/gschemas.compiled $(MSGSRC:.po=.mo)
+
+check-po-headers:
+	./scripts/check-po-headers.sh
 
 ./schemas/gschemas.compiled: ./schemas/org.gnome.shell.extensions.zorin-taskbar.gschema.xml
 	glib-compile-schemas ./schemas/
